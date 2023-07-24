@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Bootstrap sub-theme.
+ *
+ * Place your custom PHP code in this file.
+ */
+  
+ /**
+ * Implements hook_theme_suggestions_views_view_unformatted_alter().
+ */
+
+ function stac_theme_suggestions_views_view_unformatted_alter(&$suggestions, $variables) {
+    if ($variables['view']->id() == "sponsors" && $variables['view']->current_display == "oursponsors") {
+        $suggestions[] = 'views_view_unformatted__' . $variables['view']->id() . '__oursponsors';   
+      }
+ }

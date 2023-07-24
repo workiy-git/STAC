@@ -1,0 +1,12 @@
+name: Flickr Block
+type: module
+description: Create Flickr blocks using Flickr API service.
+core_version_requirement: ^8.8 || ^9 || ^10
+configure: flickr_block.config
+dependencies:
+  - drupal:block
+
+# Information added by Drupal.org packaging script on 2022-08-08
+version: '2.0.1'
+project: 'flickr_block'
+datestamp: 1659962857

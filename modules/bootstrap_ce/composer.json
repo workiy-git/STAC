@@ -1,0 +1,30 @@
+{
+  "name": "drupal/bootstrap_ce",
+  "description": "This module allows you set a Bootstrap Carousel as a formatter of 'entity_references' field and 'image' fields.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/bootstrap_ce",
+  "authors": [
+  {
+    "name": "Rajeshreeputra Pravin Dhondiba Gaikwad",
+    "homepage": "https://www.drupal.org/u/Rajeshreeputra",
+    "role": "Maintainer"
+  },
+  {
+    "name": "Pixel Burger",
+    "homepage": "https://www.drupal.org/u/pixel-burger",
+    "role": "Maintainer"
+  },
+  {
+    "name": "Ganesh Suryawanshi",
+    "homepage": "https://www.drupal.org/u/ganeshsurya11",
+    "role": "Maintainer"
+  }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/bootstrap_ce",
+    "source": "https://git.drupalcode.org/project/bootstrap_ce"
+  },
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev"
+}
+
