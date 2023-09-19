@@ -1,0 +1,6 @@
+services:
+  flickr_block.commands:
+    class: \Drupal\flickr_block\Commands\FlickrBlockCommands
+    arguments: ['@config.factory', '@flickr_block.flickr_api']
+    tags:
+      - { name: drush.command }
