@@ -14,10 +14,11 @@ namespace Symfony\Component\VarExporter;
 use Symfony\Component\VarExporter\Internal\Hydrator;
 use Symfony\Component\VarExporter\Internal\LazyObjectRegistry as Registry;
 use Symfony\Component\VarExporter\Internal\LazyObjectState;
+use Symfony\Component\VarExporter\Internal\LazyObjectTrait;
 
 trait LazyGhostTrait
 {
-    private LazyObjectState $lazyObjectState;
+    use LazyObjectTrait;
 
     /**
      * Creates a lazy-loading ghost instance.
@@ -41,8 +42,9 @@ trait LazyGhostTrait
      *        |array{"\0": \Closure(static, array<string, mixed>):array<string, mixed>}) $initializer
      * @param array<string, true>|null $skippedProperties An array indexed by the properties to skip, aka the ones
      *                                                    that the initializer doesn't set when its a closure
+     * @param static|null              $instance
      */
-    public static function createLazyGhost(\Closure|array $initializer, array $skippedProperties = null, self $instance = null): static
+    public static function createLazyGhost(\Closure|array $initializer, array $skippedProperties = null, object $instance = null): static
     {
         $onlyProperties = null === $skippedProperties && \is_array($initializer) ? $initializer : null;
 
@@ -193,24 +195,43 @@ trait LazyGhostTrait
 
         get_in_scope:
 
-        if (null === $scope) {
-            if (null === $readonlyScope) {
-                return $this->$name;
+        try {
+            if (null === $scope) {
+                if (null === $readonlyScope) {
+                    return $this->$name;
+                }
+                $value = $this->$name;
+
+                return $value;
             }
-            $value = $this->$name;
+            $accessor = Registry::$classAccessors[$scope] ??= Registry::getClassAccessors($scope);
 
-            return $value;
+            return $accessor['get']($this, $name, null !== $readonlyScope);
+        } catch (\Error $e) {
+            if (\Error::class !== $e::class || !str_starts_with($e->getMessage(), 'Cannot access uninitialized non-nullable property')) {
+                throw $e;
+            }
+
+            try {
+                if (null === $scope) {
+                    $this->$name = [];
+
+                    return $this->$name;
+                }
+
+                $accessor['set']($this, $name, []);
+
+                return $accessor['get']($this, $name, null !== $readonlyScope);
+            } catch (\Error) {
+                throw $e;
+            }
         }
-        $accessor = Registry::$classAccessors[$scope] ??= Registry::getClassAccessors($scope);
-
-        return $accessor['get']($this, $name, null !== $readonlyScope);
     }
 
     public function __set($name, $value): void
     {
         $propertyScopes = Hydrator::$propertyScopes[$this::class] ??= Hydrator::getPropertyScopes($this::class);
         $scope = null;
-        $state = null;
 
         if ([$class, , $readonlyScope] = $propertyScopes[$name] ?? null) {
             $scope = Registry::getScope($propertyScopes, $class, $name, $readonlyScope);

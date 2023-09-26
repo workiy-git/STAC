@@ -814,7 +814,7 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
 $databases['default']['default'] = array (
-  'database' => 'stac1',
+  'database' => 'sepaktakraw',
   'username' => 'sepaktest',
   'password' => ')?UmDl{#?Q#i',
   'prefix' => '',

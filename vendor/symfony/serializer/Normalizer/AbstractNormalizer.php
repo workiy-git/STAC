@@ -113,6 +113,12 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
     public const IGNORED_ATTRIBUTES = 'ignored_attributes';
 
     /**
+     * Require all properties to be listed in the input instead of falling
+     * back to null for nullable ones.
+     */
+    public const REQUIRE_ALL_PROPERTIES = 'require_all_properties';
+
+    /**
      * @internal
      */
     protected const CIRCULAR_REFERENCE_LIMIT_COUNTERS = 'circular_reference_limit_counters';
@@ -150,8 +156,13 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
         }
     }
 
+    /**
+     * @deprecated since Symfony 6.3, use "getSupportedTypes()" instead
+     */
     public function hasCacheableSupportsMethod(): bool
     {
+        trigger_deprecation('symfony/serializer', '6.3', 'The "%s()" method is deprecated, implement "%s::getSupportedTypes()" instead.', __METHOD__, get_debug_type($this));
+
         return false;
     }
 
@@ -231,9 +242,9 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
 
             // If you update this check, update accordingly the one in Symfony\Component\PropertyInfo\Extractor\SerializerExtractor::getProperties()
             if (
-                !$ignore &&
-                ([] === $groups || array_intersect(array_merge($attributeMetadata->getGroups(), ['*']), $groups)) &&
-                $this->isAllowedAttribute($classOrObject, $name = $attributeMetadata->getName(), null, $context)
+                !$ignore
+                && ([] === $groups || array_intersect(array_merge($attributeMetadata->getGroups(), ['*']), $groups))
+                && $this->isAllowedAttribute($classOrObject, $name = $attributeMetadata->getName(), null, $context)
             ) {
                 $allowedAttributes[] = $attributesAsString ? $name : $attributeMetadata;
             }
@@ -322,29 +333,30 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
 
         $constructor = $this->getConstructor($data, $class, $context, $reflectionClass, $allowedAttributes);
         if ($constructor) {
+            $context['has_constructor'] = true;
             if (true !== $constructor->isPublic()) {
                 return $reflectionClass->newInstanceWithoutConstructor();
             }
 
             $constructorParameters = $constructor->getParameters();
-
+            $missingConstructorArguments = [];
             $params = [];
             foreach ($constructorParameters as $constructorParameter) {
                 $paramName = $constructorParameter->name;
+                $attributeContext = $this->getAttributeDenormalizationContext($class, $paramName, $context);
                 $key = $this->nameConverter ? $this->nameConverter->normalize($paramName, $class, $format, $context) : $paramName;
-                $attributeContext = $this->getAttributeDenormalizationContext($class, $key, $context);
 
                 $allowed = false === $allowedAttributes || \in_array($paramName, $allowedAttributes);
                 $ignored = !$this->isAllowedAttribute($class, $paramName, $format, $context);
                 if ($constructorParameter->isVariadic()) {
                     if ($allowed && !$ignored && (isset($data[$key]) || \array_key_exists($key, $data))) {
-                        if (!\is_array($data[$paramName])) {
+                        if (!\is_array($data[$key])) {
                             throw new RuntimeException(sprintf('Cannot create an instance of "%s" from serialized data because the variadic parameter "%s" can only accept an array.', $class, $constructorParameter->name));
                         }
 
                         $variadicParameters = [];
-                        foreach ($data[$paramName] as $parameterData) {
-                            $variadicParameters[] = $this->denormalizeParameter($reflectionClass, $constructorParameter, $paramName, $parameterData, $attributeContext, $format);
+                        foreach ($data[$key] as $parameterKey => $parameterData) {
+                            $variadicParameters[$parameterKey] = $this->denormalizeParameter($reflectionClass, $constructorParameter, $paramName, $parameterData, $attributeContext, $format);
                         }
 
                         $params = array_merge($params, $variadicParameters);
@@ -377,11 +389,12 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
                     $params[] = $this->defaultContext[self::DEFAULT_CONSTRUCTOR_ARGUMENTS][$class][$key];
                 } elseif ($constructorParameter->isDefaultValueAvailable()) {
                     $params[] = $constructorParameter->getDefaultValue();
-                } elseif ($constructorParameter->hasType() && $constructorParameter->getType()->allowsNull()) {
+                } elseif (!($context[self::REQUIRE_ALL_PROPERTIES] ?? $this->defaultContext[self::REQUIRE_ALL_PROPERTIES] ?? false) && $constructorParameter->hasType() && $constructorParameter->getType()->allowsNull()) {
                     $params[] = null;
                 } else {
                     if (!isset($context['not_normalizable_value_exceptions'])) {
-                        throw new MissingConstructorArgumentsException(sprintf('Cannot create an instance of "%s" from serialized data because its constructor requires parameter "%s" to be present.', $class, $constructorParameter->name), 0, null, [$constructorParameter->name]);
+                        $missingConstructorArguments[] = $constructorParameter->name;
+                        continue;
                     }
 
                     $exception = NotNormalizableValueException::createForUnexpectedDataType(
@@ -397,12 +410,26 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
                 }
             }
 
-            if ($constructor->isConstructor()) {
-                return $reflectionClass->newInstanceArgs($params);
-            } else {
+            if ($missingConstructorArguments) {
+                throw new MissingConstructorArgumentsException(sprintf('Cannot create an instance of "%s" from serialized data because its constructor requires the following parameters to be present : "$%s".', $class, implode('", "$', $missingConstructorArguments)), 0, null, $missingConstructorArguments, $class);
+            }
+
+            if (!$constructor->isConstructor()) {
                 return $constructor->invokeArgs(null, $params);
             }
+
+            try {
+                return $reflectionClass->newInstanceArgs($params);
+            } catch (\TypeError $e) {
+                if (!isset($context['not_normalizable_value_exceptions'])) {
+                    throw $e;
+                }
+
+                return $reflectionClass->newInstanceWithoutConstructor();
+            }
         }
+
+        unset($context['has_constructor']);
 
         return new $class();
     }

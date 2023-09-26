@@ -126,7 +126,7 @@ a {
 /*.sponsors-column {
     column-count: 5;
 }*/
-.block-views-blockour-2022-sponsors-block-1>.form-group>.sponsors-column>.view-content>.views-row>.views-field-body>.field-content>a>img{
+.block-views-blockour-2022-sponsors1-block-1>.form-group>.sponsors-column>.view-content>.views-row>.views-field-body>.field-content>a>img{
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 15px;
     margin-bottom: 2rem;
@@ -207,22 +207,22 @@ a {
 
 
 #block-contactfooter {
-    background: #2B63D9;
+    background: #ff0000;
     padding: 20px;
     left: 0;
-    height: 16rem;
+    height: 18rem;
     width: 60%;
     border-radius: 0%;
     float: left;
 }
 .contact-info{
-    color:white;
-    font-size:x-large;
+    color:#ffffff;
+    font-size:22px;
     margin-left:7%;
 }
 .contact-info2{
-    color:#99b3d6;
-    font-size:small;
+    color:#ffffff;
+    font-size:14px;
     margin-left:7%;
 }
 .contact-input{
@@ -238,11 +238,16 @@ a {
     font-size:16px;
     padding:2%;
 }
+.user-guide{
+    float: right;
+    margin-top: 1.99%;
+    margin-right: 3%;
+}
 .email-form-main{
     width: 40%;
     float: right;
     background: #2B63D9;
-    height: 16rem;
+    height: 18rem;
 }
 /*
 #edit-enter-your-email{
@@ -255,12 +260,7 @@ a {
 #block-webform> .email-form-main>.form-group{
     display: inline-block;
 }
-#edit-submit{
-    border-radius: 0px 6px 6px 0px;
-    background: var(--primary-600, #437EF7);
-    margin-bottom: 2%;
-    margin-left: -6%;
-}
+
 .contact-info3{
     border: #2B63D9;
     border-radius: 15px;
@@ -284,21 +284,27 @@ a {
     color: white;
 }
 .mainfooter-col1 {
-    margin-left: 7%;
+    margin-left: 5%;
     float: left;
 }
 
 .mainfooter-col3 {
     margin-right: 10%;
-    margin-top: 10%;
+    margin-top: 5%;
     float: right;
 }
 .a2 {
     height: 20px;
     width: 20px;
-    margin-top: -10rem;
+    /*margin-top: -10rem;*/
 }
 #a1 {
+    display: block;
+    text-decoration: none;
+    color: grey;
+    line-height: 25px;
+}
+#footer-address{
     display: block;
     text-decoration: none;
     color: grey;
@@ -309,7 +315,7 @@ a {
 }
 #a2 {
     margin-left: 1.5rem;
-    margin-top: -8rem;
+    /*margin-top: -8rem;*/
 }
 /*footer-main-block*/
 .footer{
@@ -390,14 +396,17 @@ a {
     margin-top: -2px;
     margin-right: 18%;
     height: 2px;
+    margin-bottom: 2%;
 }
 .sponsors-footer {
     border-bottom: 0.7rem red solid;
     margin-left: 18%;
     margin-right: 18%;
     height: 0.7rem;
+    margin-bottom: 1%;
+    margin-top: 1%;
 }
-#block-views-block-our-2022-sponsors-block-1 {
+#block-views-block-our-2022-sponsors1-block-1 {
     height: auto;
     width: auto;
     margin: 2rem 0 2rem 0;
@@ -479,6 +488,7 @@ a {
     height: auto;
     width: 100%;
     margin: 0px;
+    position: static;
 }  
 /* Blogs */
 
@@ -603,6 +613,10 @@ a {
     text-align:center;
     color: #808080;
 }
+#block-stac{
+    position: static;
+
+}
 .contextual-region>.content>.layout>.layout__region--content>.block-field-blocknodepagetitle>span {
     margin-left: 35%;
     margin-top: 2rem;
@@ -615,8 +629,7 @@ a {
   .author{
     text-align: center;
     position: relative;
-    margin-top: 5rem;
-    margin-bottom: -4rem;
+    margin-top: 3%;
   }
   .block-extra-field-blocknodeblogslinks {
     text-align: center;
@@ -667,9 +680,6 @@ a {
   .equipment-button{
     width: auto;
     align-content: center;
-  }
-  .content{
-    margin-top: 5rem;
   }
 
 /*Resources View */
@@ -779,6 +789,9 @@ float:right;
     .text-all {
         text-align: justify;
     }
+    .logo {
+        margin-top:12%;
+    }
     .menu--stac{
         text-align: center;
     }
@@ -812,7 +825,7 @@ float:right;
         margin-right: 7%;
     }
     .mainfooter-col2 {
-        margin-left: 22%;   
+        margin-left: 5%;   
         float: left;
     }
     /*gallery*/
@@ -829,7 +842,7 @@ float:right;
     /*home-page-Blogs*/
     .blogs-first-block{
         display: grid;
-        height: 52rem !important;
+        height: 54rem !important;
     }
     .blogs-first-block > .home-blogs-new div div .views-field-field-image{
         width: 100%;
@@ -876,6 +889,10 @@ float:right;
         margin: 3%;
         width: 20%;
     }
+    .canadian-histroy>div>img{
+        height:350px;
+        padding:5%
+    }
 }
 @media (max-device-width: 768px){
     .nav {
@@ -911,7 +928,6 @@ float:right;
     }
     .mainfooter-col3 {
         margin-left: 3%;
-        margin-top: 20%;
         float: left;
     }
     .navbar .logo{
@@ -927,8 +943,16 @@ float:right;
         width: 40px;
     }
     #block-contactfooter{
-        width: 100%;
-        height: auto;
+        width: 100% !important;
+        height: auto !important;
+    }
+    #block-webform{
+        width: 100% !important;
+        height: auto !important;
+        float: none;   
+    }
+    .webform-submission-register-form{
+        margin-left: 10%;
     }
     .home-blogs-new {
         column-count:1 !important;
@@ -1053,7 +1077,7 @@ float:right;
         height: 14rem;
     }*/
     .latest-blogs-v2{
-        height: 15rem;
+        height: 15rem !important;
     }
     .equipment-image{
         float: none;
@@ -1067,7 +1091,22 @@ float:right;
     }
     .view-id-current_upcoming_events > .view-content > .views-row>.views-field-body{
         width: 100% !important;
-        
+    }
+    .mainfooter-col2 {
+        margin-left: 5%;
+        float: left;
+    }
+    .mainfooter-col2-2 {
+        margin-left: 5%;
+        float: left;
+    }
+    .mainfooter-col3 {
+        margin-left:25%;
+        float: left;
+    }
+    /*tronment*/
+    .view-id-tournament > .view-content > .views-row > .views-field-body{
+        width: 100% !important;
     }
 }
 
@@ -1137,7 +1176,7 @@ float:right;
     color: #f00a21;
 }
 .latest-blogs-v2{
-    height: 18rem;
+    height: 19rem;
 }
 /*.home-blogs-new div div .views-field-body {
     padding-top:3%;
@@ -1210,6 +1249,16 @@ float:right;
     /*height: 10%;
     width: 78%;*/
 }
+.sponsors-column div div div div .views-field-body div img {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    height: 110px;
+    width: 150px;
+    /*height: 10%;
+    width: 78%;*/
+}
+
 .sponsors-column>.view-content> div{
     text-align: center;
 }
@@ -1281,4 +1330,109 @@ float:right;
 }
 .view-id-current_upcoming_events > .view-content > .views-row > .views-field-field-event-image > .field-content > img{
     border-radius:20px
+}
+.block-flickr-block > .flickr-block > li > a > img{
+    /* width:100%; */
+    border-radius: 30px;
+}
+.block-flickr-block > .flickr-block > li{
+    width:50%;
+    float: left;
+    padding: 2%;
+    /* border-radius: 33px; */
+}
+ul.flickr-block{
+  list-style-type: none;
+  padding-left: 0;
+}
+.flickr-button{
+    height: auto;
+    background-color: #437EF7;
+    border-radius: 6px;
+    color: white;
+    border: none;
+    width: auto;
+    padding: 1% 4%;
+    margin-top: 5%;
+}
+.view-id-tournament > .view-content > .views-row {
+    height: 30rem;
+}
+
+.tournament-title {
+    font-weight: bold;
+    font-size: 14px;
+    color: #f00a21;
+}
+
+.view-id-tournament > .view-content > .views-row > .views-field-body {
+    width: 67%;
+    overflow-y: auto;
+    height: 15rem;
+    margin-top: 5%;
+    color: #5f6d7e;
+    float: left;
+    padding: 1rem;
+}
+
+.view-id-tournament > .view-content > .views-row > .views-field-field-tournament-poster {
+    padding: 10px;
+    float: right;
+    width: auto;
+}
+
+.view-id-tournament > .view-content > .views-row > .views-field-field-tournament-poster > .field-content > img {
+    border-radius: 15px
+}
+/*Main content position*/
+div[id^="specific-position"] {
+    padding-top: 70px; /* Adjust the value as needed */
+    margin-top: -70px; /* Counteract the padding with negative margin */
+}
+
+#block-webform{
+    width: 50%;
+    float: right;
+    background: #ff0000;
+    height: 35rem;
+}
+#block-contactfooter {
+    background: #ff0000;
+    padding: 20px;
+    left: 0;
+    height: 35rem;
+    width: 50%;
+    border-radius: 0%;
+    float: left;
+}
+#edit-actions{
+    text-align:center
+}
+#edit-submit{
+    background: var(--primary-600, #437EF7);
+    width: 30%;
+}
+.webform-submission-register-form{
+    padding-top: 2%;
+    margin-right: 10%;
+}
+.form-control{
+    height: 25px;
+}
+.control-label{
+    font-size: smaller;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+.contact-info-main{
+    margin-top: 8%;
+    padding: 1%;
+}
+.form-required:after{
+    background-image: url("asterisk2.png");
+}
+.email-confirmation-text{
+    text-align:center;
+    color:white;
+    margin-top:10%
 }
