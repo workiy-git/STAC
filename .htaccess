@@ -1,3 +1,12 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteCond %{HTTP_HOST} ^(www\.)?sepaktakraw\.ca$ [NC]
+RewriteRule ^(.*)$ https://sepaktakraw.ca/$1 [L,R=301]
+<IfModule mod_headers.c>
+Header always set Content-Security-Policy "upgrade-insecure-requests;" env=UPGRADE
+</IfModule>
+</IfModule>
 #
 # Apache/PHP/Drupal settings:
 #
@@ -58,7 +67,7 @@ AddEncoding gzip svgz
 
 # Various rewrite rules.
 <IfModule mod_rewrite.c>
-  RewriteEngine on
+  RewriteEngine On
 
   # Set "protossl" to "s" if we were accessed via https://.  This is used later
   # if you enable "www." stripping or enforcement, in order to ensure that
@@ -144,6 +153,8 @@ AddEncoding gzip svgz
   # Deny access to any other PHP files that do not match the rules above.
   # Specifically, disallow autoload.php from being served directly.
   RewriteRule "^(.+/.*|autoload)\.php($|/)" - [F]
+  
+  
 
   # Rules to correctly serve gzip compressed CSS and JS files.
   # Requires both mod_rewrite and mod_headers to be enabled.
